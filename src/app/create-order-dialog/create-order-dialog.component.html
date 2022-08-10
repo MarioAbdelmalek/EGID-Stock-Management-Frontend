@@ -6,8 +6,8 @@
                 <mat-form-field appearance="outline" class="full-width-field">
                     <mat-label>Stock Name</mat-label>
                     <mat-select placeholder="Stock Name" formControlName="StockID">
-                        <mat-option *ngFor="let stock of stockList" [value]="stock.id">
-                            {{stock.name}}
+                        <mat-option *ngFor="let stock of stockList" [value]="stock.ID">
+                            {{stock.Name}}
                         </mat-option>
                     </mat-select>
                 </mat-form-field>
