@@ -9,6 +9,7 @@ import { MatDialog } from '@angular/material/dialog';
 import { StockService } from '../stocks/stock.service';
 import { Stock } from '../stocks/stock';
 import { UpdateOrderDialogComponent } from '../update-order-dialog/update-order-dialog.component';
+import { SignalRService } from '../signalR.service';
 
 
 @Component({
@@ -20,8 +21,10 @@ export class OrdersComponent implements OnInit {
 
   orderService: OrderService;
   stockService: StockService;
+  signalRService: any;
   private dialog!: MatDialog;
   stockList: Stock[] = [];
+  orderList: any;
 
   displayedColumns: string[] = ['ID', 'Price', 'Quantity', 'Commission', 'StockName', 'BrokerID', 'ClientID', 'Action'];
   dataSource!: MatTableDataSource<any>;
@@ -29,10 +32,11 @@ export class OrdersComponent implements OnInit {
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
 
-  constructor(orderService: OrderService, dialog: MatDialog, stockService: StockService) {
+  constructor(orderService: OrderService, dialog: MatDialog, stockService: StockService, signalRService: SignalRService) {
     this.orderService = orderService;
     this.stockService = stockService;
     this.dialog = dialog;
+    this.signalRService = signalRService;
   }
 
   applyFilter(event: Event) {
@@ -47,11 +51,12 @@ export class OrdersComponent implements OnInit {
   getAllOrders() {
     this.orderService.getAllOrders().subscribe({
       next: (res) => {
-        this.dataSource = new MatTableDataSource(res);
+        this.orderList = res;
+        this.dataSource = new MatTableDataSource(this.orderList);
         this.dataSource.paginator = this.paginator;
         this.dataSource.sort = this.sort;
       },
-      error: (err) => {
+      error: () => {
         alert("Error While Fetching The Orders!!")
       }
     }
@@ -63,7 +68,7 @@ export class OrdersComponent implements OnInit {
       next: (res) => {
         this.stockList = res;
       },
-      error: (err) => {
+      error: () => {
         alert("Error While Fetching The Stocks!!")
       }
     }
@@ -84,12 +89,36 @@ export class OrdersComponent implements OnInit {
   }
 
   deleteOrder(id: any) {
-    this.orderService.deleteOrder(id).subscribe((res) => {
-      window.location.reload();
+    this.orderService.deleteOrder(id).subscribe(() => {
+      this.getAllOrders();
     })
   }
 
   ngOnInit(): void {
     this.getAllOrders();
+
+    this.signalRService.startConnection();
+    this.signalRService.updatedOrderList.subscribe((item: any) => {
+      for (var order of item) {
+
+        var oldOrder = this.orderList.find((obj: { ID: any; }) => {
+
+          return obj.ID == order.ID;
+        });
+
+        if (oldOrder != null) {
+          var orderIndex = this.orderList.indexOf(oldOrder);
+          this.orderList[orderIndex] = order;
+        }
+        else {
+          this.orderList.push(order);
+        }
+      }
+
+      this.dataSource = new MatTableDataSource(this.orderList);
+      this.dataSource.paginator = this.paginator;
+      this.dataSource.sort = this.sort;
+
+    });
   }
 }

@@ -13,13 +13,13 @@ import { StockService } from './stock.service';
 export class StocksComponent implements OnInit {
 
   stockService: StockService;
+  signalRService: any;
 
   displayedColumns: string[] = ['ID', 'Name', 'Price'];
   dataSource!: MatTableDataSource<any>;
 
   @ViewChild(MatPaginator) paginator!: MatPaginator;
   @ViewChild(MatSort) sort!: MatSort;
-  signalRService: any;
 
   constructor(signalRService: SignalRService, stockService: StockService) {
     this.stockService = stockService;

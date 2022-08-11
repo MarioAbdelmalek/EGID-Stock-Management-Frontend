@@ -24,7 +24,7 @@ export class UpdateOrderDialogComponent implements OnInit {
   updateOrder() {
     this.orderService.updateOrder(this.orderToBeUpdated.ID, this.orderForm.value["Price"]).subscribe({
       next: () => {
-        window.location.reload();
+        this.dialogRef.close();
       },
       error: () => {
         alert("Error Updating The Order!!")

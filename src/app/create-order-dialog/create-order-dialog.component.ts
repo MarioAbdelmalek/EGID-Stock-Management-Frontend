@@ -1,5 +1,6 @@
-import { Component, OnInit } from '@angular/core';
+import { Component, Inject, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
+import { MatDialogRef } from '@angular/material/dialog';
 import { OrderService } from '../orders/orderServices/order.service';
 import { Stock } from '../stocks/stock';
 import { StockService } from '../stocks/stock.service';
@@ -17,7 +18,8 @@ export class CreateOrderDialogComponent implements OnInit {
   stockService: StockService;
   stockList: Stock[] = [];
 
-  constructor(formBulider: FormBuilder, orderService: OrderService, stockService: StockService) {
+  constructor(formBulider: FormBuilder, orderService: OrderService, stockService: StockService,
+    private dialogRef: MatDialogRef<CreateOrderDialogComponent>) {
     this.formBulider = formBulider;
     this.orderService = orderService;
     this.stockService = stockService;
@@ -33,8 +35,13 @@ export class CreateOrderDialogComponent implements OnInit {
   }
 
   createOrder() {
-    this.orderService.createOrder(this.orderForm.value).subscribe((res) => {
-      window.location.reload();
+    this.orderService.createOrder(this.orderForm.value).subscribe({
+      next: () => {
+        this.dialogRef.close();
+      },
+      error: () => {
+        alert("Error Creating The Order!!")
+      }
     })
   }
 
@@ -43,7 +50,7 @@ export class CreateOrderDialogComponent implements OnInit {
       next: (res) => {
         this.stockList = res;
       },
-      error: (err) => {
+      error: () => {
         alert("Error While Fetching The Stocks!!")
       }
     }
