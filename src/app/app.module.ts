@@ -1,11 +1,8 @@
 import { NgModule, CUSTOM_ELEMENTS_SCHEMA } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
-import { HttpClientModule } from '@angular/common/http';
+import { HttpClient, HttpClientModule, HTTP_INTERCEPTORS } from '@angular/common/http';
 import { AppRoutingModule } from './app-routing.module';
 import { AppComponent } from './app.component';
-import { OrdersComponent } from './orders/orders.component';
-import { OrderService } from './orders/orderServices/order.service';
-
 import { MatToolbarModule } from '@angular/material/toolbar';
 import { MatIconModule } from '@angular/material/icon';
 import { MatButtonModule } from '@angular/material/button';
@@ -14,32 +11,37 @@ import { MatTableModule } from '@angular/material/table';
 import { MatPaginatorModule } from '@angular/material/paginator';
 import { MatSortModule } from '@angular/material/sort';
 import { MatInputModule } from '@angular/material/input';
-import { CreateOrderDialogComponent } from './create-order-dialog/create-order-dialog.component';
 import { MatDialogModule } from '@angular/material/dialog';
 import { MatFormFieldModule } from '@angular/material/form-field';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { StocksComponent } from './stocks/stocks.component';
-import { StockService } from './stocks/stock.service';
 import { MatSelectModule } from '@angular/material/select';
-import { UpdateOrderDialogComponent } from './update-order-dialog/update-order-dialog.component';
 import { MatMenuModule } from '@angular/material/menu';
+import { MatPseudoCheckboxModule } from '@angular/material/core';
+import { MatCardModule } from '@angular/material/card';
+import { MatTabsModule } from '@angular/material/tabs';
+import { FlexLayoutModule } from '@angular/flex-layout';
+import { OrderService } from './main/orders/order.service';
+import { StockService } from './main/stocks/stock.service';
+import { TokenInterceptorService } from './users/token-interceptor.service';
+import { UserLoginComponent } from './users/user-login/user-login.component';
+import { UserRegistrationComponent } from './users/user-registration/user-registration.component';
+import { UserService } from './users/user.service';
+
 
 
 @NgModule({
   declarations: [
     AppComponent,
-    OrdersComponent,
-    CreateOrderDialogComponent,
-    StocksComponent,
-    UpdateOrderDialogComponent
+    UserLoginComponent,
+    UserRegistrationComponent,
   ],
+
   imports: [
     BrowserModule,
     AppRoutingModule,
     HttpClientModule,
     MatToolbarModule,
     MatIconModule,
-    MatButtonModule,
     BrowserAnimationsModule,
     MatTableModule,
     MatPaginatorModule,
@@ -50,10 +52,15 @@ import { MatMenuModule } from '@angular/material/menu';
     FormsModule,
     ReactiveFormsModule,
     MatSelectModule,
-    MatIconModule,
     MatMenuModule,
+    MatCardModule,
+    MatPseudoCheckboxModule,
+    MatTabsModule,
+    MatButtonModule,
+    FlexLayoutModule
   ],
-  providers: [OrderService, StockService, HttpClientModule],
+
+  providers: [OrderService, StockService, HttpClient, HttpClientModule, UserService, { provide: HTTP_INTERCEPTORS, useClass: TokenInterceptorService, multi: true }],
   bootstrap: [AppComponent],
   schemas: [CUSTOM_ELEMENTS_SCHEMA]
 })

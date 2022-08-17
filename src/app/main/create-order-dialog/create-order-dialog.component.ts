@@ -1,7 +1,7 @@
-import { Component, Inject, OnInit } from '@angular/core';
+import { Component, OnInit } from '@angular/core';
 import { FormGroup, FormBuilder, Validators } from '@angular/forms';
 import { MatDialogRef } from '@angular/material/dialog';
-import { OrderService } from '../orders/orderServices/order.service';
+import { OrderService } from '../orders/order.service';
 import { Stock } from '../stocks/stock';
 import { StockService } from '../stocks/stock.service';
 
@@ -13,20 +13,20 @@ import { StockService } from '../stocks/stock.service';
 export class CreateOrderDialogComponent implements OnInit {
 
   orderForm!: FormGroup;
-  private formBulider: FormBuilder;
+  private formBuilder: FormBuilder;
   orderService: OrderService;
   stockService: StockService;
   stockList: Stock[] = [];
 
-  constructor(formBulider: FormBuilder, orderService: OrderService, stockService: StockService,
+  constructor(formBuilder: FormBuilder, orderService: OrderService, stockService: StockService,
     private dialogRef: MatDialogRef<CreateOrderDialogComponent>) {
-    this.formBulider = formBulider;
+    this.formBuilder = formBuilder;
     this.orderService = orderService;
     this.stockService = stockService;
   }
 
   ngOnInit(): void {
-    this.orderForm = this.formBulider.group({
+    this.orderForm = this.formBuilder.group({
       StockID: ['', Validators.required],
       Price: ['', Validators.required],
       Quantity: ['', Validators.required]

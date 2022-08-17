@@ -1,7 +1,4 @@
-import { Component, Inject, OnInit } from '@angular/core';
-//import { HttpClient } from '@microsoft/signalr';
-import { SignalRService } from './signalR.service';
-import { HttpClient } from '@angular/common/http'
+import { Component, OnInit } from '@angular/core';
 
 @Component({
   selector: 'app-root',
@@ -11,10 +8,9 @@ import { HttpClient } from '@angular/common/http'
 export class AppComponent implements OnInit {
   title = 'Stock Management';
 
-  constructor(public signalRService: SignalRService, private http: HttpClient) { }
+  constructor() { }
 
   ngOnInit() {
   }
-
 
 }

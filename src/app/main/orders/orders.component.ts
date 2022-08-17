@@ -1,6 +1,5 @@
 import { Component, OnInit } from '@angular/core';
-import { OrderService } from './orderServices/order.service';
-import { CreateOrderDialogComponent } from '../create-order-dialog/create-order-dialog.component';
+import { OrderService } from './order.service';
 import { ViewChild } from '@angular/core';
 import { MatPaginator } from '@angular/material/paginator';
 import { MatSort } from '@angular/material/sort';
@@ -8,8 +7,9 @@ import { MatTableDataSource } from '@angular/material/table';
 import { MatDialog } from '@angular/material/dialog';
 import { StockService } from '../stocks/stock.service';
 import { Stock } from '../stocks/stock';
+import { SignalRService } from 'src/app/main/signalR.service';
+import { CreateOrderDialogComponent } from '../create-order-dialog/create-order-dialog.component';
 import { UpdateOrderDialogComponent } from '../update-order-dialog/update-order-dialog.component';
-import { SignalRService } from '../signalR.service';
 
 
 @Component({
