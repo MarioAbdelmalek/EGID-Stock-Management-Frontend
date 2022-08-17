@@ -6,6 +6,7 @@ import { Observable } from 'rxjs';
 export class UserService {
 
     constructor(private http: HttpClient) {
+        
     }
 
     registerUser(data: any) {
